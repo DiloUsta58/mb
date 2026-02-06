@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Zählliste Bereich Baffle</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Zählliste Bereich Baffle</h1>
+
+    <div class="date">
+        <div class="kw-bar">
+            <strong>Woche:</strong>
+            <select id="kwSelect"></select>
+            <span id="kwDisplay"></span>
+            <button id="printBtn">Drucken</button>
+        </div>
+    </div>
+
+ <div class="tables-wrapper">
+
+    <!-- HAUPTTABELLE -->
+    <div class="main-table">
+        <table id="inventoryTable">
+            <thead>
+                <tr>
+                    <th rowspan="2" class="col-name">Bezeichnung</th>
+                    <th rowspan="2" class="col-art">Artikelnummer</th>
+                    <th colspan="4" class="group">Anzahl Bestand</th>
+                </tr>
+                <tr>
+                    <th class="col-num">vor Ort</th>
+                    <th class="col-num">im Lager</th>
+                    <th class="col-num">Aufbau</th>
+                    <th class="col-num">Gesamt</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <!-- SEEDS -->
+    <div class="seeds-wrapper">
+        <h2 class="subTitle">Seeds</h2>
+        <table id="seedsTable" class="seedsTable">
+            <thead>
+                <tr>
+                    <th>Typ</th>
+                    <th>Menge (Stk)</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+</div>
+
+</div>
+
+
+<script src="js/app.js"></script>
+</body>
+</html>

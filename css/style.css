@@ -1,0 +1,352 @@
+/* ===== RESET ===== */
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    background: linear-gradient(180deg,#f4f6f8,#e9edf2);
+    color:#1c1c1c;
+    padding:20px;
+}
+
+/* ===== CONTAINER ===== */
+.container{
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(12px);
+    border-radius:16px;
+    padding:24px;
+    max-width:1200px;
+    margin:auto;
+    box-shadow:
+        0 10px 25px rgba(0,0,0,0.08),
+        inset 0 1px 0 rgba(255,255,255,0.6);
+}
+
+/* ===== HEADER ===== */
+h1{
+    font-size:28px;
+    font-weight:600;
+    margin-bottom:6px;
+}
+
+.date{
+    color:#666;
+    margin-bottom:22px;
+}
+
+/* ===== TABLE BASE ===== */
+table{
+    width:100%;
+    border-collapse:separate;
+    border-spacing:0;
+    overflow:hidden;
+    border-radius:14px;
+    background:white;
+    box-shadow:0 4px 14px rgba(0,0,0,0.06);
+}
+
+/* Header */
+thead{
+    background: linear-gradient(180deg,#f7f9fb,#eef2f6);
+}
+
+th{
+    padding:14px 12px;
+    font-weight:600;
+    font-size:15px;
+    text-align:left;
+    border-bottom:1px solid #e2e6ea;
+}
+
+/* Group headline */
+.group{
+    text-align:center;
+    font-size:18px;
+    letter-spacing:0.4px;
+}
+
+/* Rows */
+td{
+    padding:10px 12px;
+    border-bottom:1px solid #f0f2f4;
+    font-size:15px;
+}
+
+tbody tr:last-child td{
+    border-bottom:none;
+}
+
+tbody tr:hover{
+    background:#f8fbff;
+}
+
+/* Numbers centered */
+td:nth-child(n+3){
+    text-align:center;
+    font-weight:500;
+}
+
+/* ===== INPUT FIELDS ===== */
+td input{
+    width:70px;
+    padding:6px;
+    border-radius:8px;
+    border:1px solid #d0d7de;
+    background:#f9fbfd;
+    font-size:15px;
+    text-align:center;
+    transition:all .15s ease;
+}
+
+td input:focus{
+    outline:none;
+    border:1px solid #4c9ffe;
+    background:white;
+    box-shadow:0 0 0 3px rgba(76,159,254,0.15);
+}
+
+/* Gesamt Spalte hervorheben */
+.total{
+    font-weight:700;
+    color:#0a5bd3;
+}
+
+/* ===== COLUMN WIDTHS DESKTOP ===== */
+.col-name{ width:40%; }
+.col-art{ width:15%; }
+.col-num{ width:11.25%; }
+
+/* ============================= */
+/* ======== TABLET VIEW ======== */
+/* ============================= */
+@media (max-width: 1000px){
+
+    h1{ font-size:24px; }
+
+    th{ font-size:14px; padding:12px 8px; }
+    td{ font-size:14px; padding:10px 8px; }
+
+    td input{
+        width:60px;
+        font-size:14px;
+    }
+}
+
+/* ============================= */
+/* ======== MOBILE VIEW ======== */
+/* ============================= */
+@media (max-width: 700px){
+
+    body{ padding:10px; }
+
+    .container{
+        padding:14px;
+        border-radius:12px;
+    }
+
+    h1{ font-size:20px; }
+
+    table{
+        font-size:13px;
+    }
+
+    th{
+        font-size:12px;
+        padding:10px 6px;
+    }
+
+    td{
+        padding:8px 6px;
+        font-size:13px;
+    }
+
+    td input{
+        width:52px;
+        padding:5px;
+        font-size:13px;
+    }
+
+    .group{
+        font-size:15px;
+    }
+}
+
+/* ===== SEEDS TABELLE ===== */
+
+.subTitle{
+    margin-top:30px;
+    margin-bottom:10px;
+    font-size:20px;
+    font-weight:600;
+}
+
+/* kleine Seeds Tabelle */
+.seedsTable{
+    max-width:350px;
+}
+
+.seedsTable td:nth-child(2),
+.seedsTable th:nth-child(2){
+    text-align:center;
+}
+
+/* ===== TABLES SIDE BY SIDE ===== */
+.tables-wrapper{
+    display:flex;
+    gap:30px;
+    align-items:flex-start;
+}
+
+/* Haupttabelle nimmt Platz */
+.main-table{
+    flex:1;
+}
+
+/* Seeds Karte rechts */
+.seeds-wrapper{
+    width:260px;
+    background:white;
+    padding:16px;
+    border-radius:14px;
+    box-shadow:0 4px 14px rgba(0,0,0,0.06);
+}
+
+/* Mobile → untereinander */
+@media (max-width:900px){
+    .tables-wrapper{
+        flex-direction:column;
+    }
+
+    .seeds-wrapper{
+        width:100%;
+    }
+}
+
+/* Überschrift Seeds bündig mit Tabelle */
+.seeds-wrapper .subTitle{
+    margin-top:0;
+}
+
+.kw-bar{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:20px;
+}
+
+#kwSelect{
+    padding:6px 10px;
+    border-radius:8px;
+    border:1px solid #cfd6dd;
+    font-size:15px;
+    background:white;
+}
+
+#printBtn{
+    padding:6px 14px;
+    border-radius:8px;
+    border:1px solid #cfd6dd;
+    background:white;
+    cursor:pointer;
+}
+
+#printBtn:hover{
+    background:#f3f6f9;
+}
+
+/* ================= PRINT MODE A4 LANDSCAPE ================= */
+@media print {
+
+    @page{
+        size: A4 landscape;
+        margin:10mm;
+    }
+
+    html, body{
+        width:297mm;
+        height:210mm;
+        background:white;
+        margin:0;
+        padding:0;
+        font-family: Arial, Helvetica, sans-serif;
+        zoom:1;              /* keine Verkleinerung mehr */
+    }
+
+
+    /* UI ausblenden */
+    .kw-bar,
+    button{
+        display:none !important;
+    }
+
+    /* Container neutralisieren */
+    .container{
+        max-width:none;
+        padding:0;
+        margin:0;
+        box-shadow:none;
+        backdrop-filter:none;
+    }
+
+    h1{
+        font-size:22px;
+        margin:0 0 4px 0;
+    }
+
+    .date{
+        margin-bottom:10px;
+    }
+
+    /* Hauptlayout: Tabellen nebeneinander erzwingen */
+    /* Tabellen im Druck UNTEREINANDER */
+    .tables-wrapper{
+        display:block;
+        page-break-inside:avoid;
+        break-inside:avoid;
+    }
+
+    .main-table-wrapper{
+        width:100%;
+        margin-bottom:18px;
+    }
+
+    .seeds-wrapper{
+        width:350px;   /* kleine kompakte Seeds Tabelle */
+        margin-top:10px;
+    }
+
+
+    /* Inputs verschwinden → Zahlen anzeigen */
+    input{
+        display:none;
+    }
+
+    td::after{
+        content: attr(data-print);
+        font-weight:500;
+    }
+
+    /* Druck Schriftgrößen optimieren */
+        table{
+            font-size:12px;      /* deutlich besser lesbar */
+        }
+
+        th{
+            font-size:15px;
+            padding:8px;
+        }
+
+        td{
+            padding:8px;
+        }
+
+        .seeds-wrapper table{
+            font-size:10px;
+        }
+
+}
+
+
