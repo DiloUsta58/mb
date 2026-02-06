@@ -265,15 +265,13 @@ td input:focus{
         margin:10mm;
     }
 
-    html, body{
-        width:297mm;
-        height:210mm;
-        background:white;
-        margin:0;
-        padding:0;
-        font-family: Arial, Helvetica, sans-serif;
-        zoom:1;              /* keine Verkleinerung mehr */
-    }
+html, body{
+    background:white;
+    margin:0;
+    padding:0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
 
 
     /* UI ausblenden */
@@ -326,16 +324,16 @@ td input:focus{
 
     td::after{
         content: attr(data-print);
-        font-weight:500;
+        font-weight:600;
     }
 
     /* Druck Schriftgrößen optimieren */
         table{
-            font-size:12px;      /* deutlich besser lesbar */
+            font-size:16px;      /* deutlich besser lesbar */
         }
 
         th{
-            font-size:15px;
+            font-size:17px;
             padding:8px;
         }
 
@@ -344,7 +342,16 @@ td input:focus{
         }
 
         .seeds-wrapper table{
-            font-size:10px;
+            font-size:16px;
+        }
+        /* verhindert leere Folgeseiten */
+        *{
+            page-break-after:auto !important;
+        }
+
+        body::after{
+            content:none !important;
+            display:none !important;
         }
 
 }
