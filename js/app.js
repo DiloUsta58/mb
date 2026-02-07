@@ -63,7 +63,7 @@ let defaultInventory = [
 let defaultSeeds = [
     { typ:"A", menge:91 },
     { typ:"B", menge:127 },
-    { typ:"S&S", menge:41 }
+    { typ:"SfS", menge:41 }
 ];
 
 const weekData = loadWeekData();
@@ -293,3 +293,28 @@ kwSelect.addEventListener("change", ()=>{
 document.getElementById("printBtn").addEventListener("click", ()=>{
     window.print();
 });
+
+/* ===============================
+   SERVICE WORKER REGISTRIEREN
+=============================== */
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js")
+      .then(() => console.log("Service Worker aktiv"))
+      .catch(err => console.log("SW Fehler:", err));
+  });
+}
+
+/* ===============================
+   AKTUELLES DATUM FOOTER
+=============================== */
+function formatGermanDate(date){
+    return date.toLocaleDateString("de-DE", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric"
+    });
+}
+
+document.getElementById("currentDate").textContent =
+    formatGermanDate(new Date());
