@@ -27,6 +27,8 @@ function loadAllWeeks(){
 function loadWeekData(){
     const allWeeks = loadAllWeeks();
     return allWeeks[CURRENT_KW_KEY] || null;
+    updatePrintHeader();
+
 }
 
 /* Woche speichern */
@@ -66,10 +68,25 @@ let defaultSeeds = [
     { typ:"SfS", menge:41 }
 ];
 
+/* ==============================
+   GLOBALE APP STATE VARS
+============================== */
+let currentKW = getCurrentKW();   // ← NEU (global verfügbar)
+
 const weekData = loadWeekData();
 
 let data = weekData ? weekData.inventory : defaultInventory;
 let seedsData = weekData ? weekData.seeds : defaultSeeds;
+
+
+function getCurrentKW(){
+    const now = new Date();
+    const firstJan = new Date(now.getFullYear(),0,1);
+    const days = Math.floor((now - firstJan) / (24*60*60*1000));
+    return Math.ceil((days + firstJan.getDay()+1) / 7);
+}
+
+
 
 document.getElementById("kwDisplay").textContent =
     `KW ${KW.week} / ${new Date().toLocaleDateString("de-DE")}`;
@@ -318,3 +335,42 @@ function formatGermanDate(date){
 
 document.getElementById("currentDate").textContent =
     formatGermanDate(new Date());
+
+/* ===============================
+   DATEN ZURÜCKSETZEN (pro KW)
+=============================== */
+document.getElementById("resetBtn").addEventListener("click", ()=>{
+
+    if(!confirm("Alle Daten dieser Woche wirklich löschen?"))
+        return;
+
+    const weekKey = STORAGE_KEY + "_KW_" + currentKW;
+
+    localStorage.removeItem(weekKey);
+
+    // Default Daten neu laden
+    loadWeekData();
+    renderTable();
+    renderSeeds();
+});
+
+/* ===============================
+   DRUCK HEADER (KW anzeigen)
+=============================== */
+function updatePrintHeader(){
+    document.querySelector(".print-kw").textContent =
+        "Kalenderwoche: " + currentKW;
+}
+
+/* =====================================
+   APP START (DOM READY)
+===================================== */
+document.addEventListener("DOMContentLoaded", () => {
+
+    updatePrintHeader();
+    renderTable();
+    renderSeeds();
+
+});
+
+

@@ -356,4 +356,36 @@ html, body{
 
 }
 
+.footer{
+    margin-top:30px;
+    text-align:center;
+    font-size:14px;
+    color:#6b7280;
+}
 
+
+#resetBtn{
+    padding:6px 14px;
+    border-radius:8px;
+    border:1px solid #e54848;
+    background:#fff5f5;
+    color:#c62828;
+    cursor:pointer;
+}
+
+#resetBtn:hover{
+    background:#ffe3e3;
+}
+
+.print-header{
+    display:none;
+}
+
+@media print{
+    .print-header{
+        display:block;
+        font-size:20px;
+        font-weight:600;
+        margin-bottom:12px;
+    }
+}
