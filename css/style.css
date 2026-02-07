@@ -389,3 +389,62 @@ html, body{
         margin-bottom:12px;
     }
 }
+
+.reset-panel{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.25);
+    backdrop-filter:blur(6px);
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    padding:20px;
+    justify-content:center;
+    align-items:center;
+}
+
+.reset-panel h3{
+    margin-bottom:10px;
+}
+
+.reset-panel select{
+    padding:6px 10px;
+    border-radius:8px;
+}
+
+.reset-actions{
+    margin-top:10px;
+    display:flex;
+    gap:10px;
+}
+
+.hidden{ display:none; }
+
+/* ===============================
+   UPDATE BANNER
+=============================== */
+
+#updateBanner{
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #111;
+    color: white;
+    padding: 14px 22px;
+    border-radius: 14px;
+    font-weight: 600;
+    box-shadow: 0 10px 25px rgba(0,0,0,.25);
+    display: none;
+    z-index: 9999;
+}
+
+#updateBanner button{
+    margin-left: 14px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: none;
+    background: #0a84ff;
+    color: white;
+    cursor: pointer;
+}

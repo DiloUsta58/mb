@@ -1,7 +1,12 @@
 /* =========================
+   APP VERSION
+========================= */
+const APP_VERSION = "1.1.1";
+
+
+/* =========================
    KW + STORAGE SYSTEM
 ========================= */
-
 const STORAGE_KEY = "baffleInventoryKW";
 
 /* ISO Kalenderwoche berechnen */
@@ -16,24 +21,60 @@ function getISOWeek(){
 }
 
 const KW = getISOWeek();
-const CURRENT_KW_KEY = `${KW.year}-KW${KW.week}`;
 
 /* Alle Wochen laden */
 function loadAllWeeks(){
     return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
 }
 
-/* Eine Woche laden */
+/* =====================================
+   EINE WOCHE LADEN
+===================================== */
 function loadWeekData(){
-    const allWeeks = loadAllWeeks();
-    return allWeeks[CURRENT_KW_KEY] || null;
-    updatePrintHeader();
 
+    const selectedWeek = kwSelect.value;   // z.B. 2026-KW6
+    const allWeeks = loadAllWeeks();
+
+    /* aktuelle KW ermitteln */
+    const currentKW = getCurrentKW();
+    const selectedKWNumber = Number(selectedWeek.split("KW")[1]);
+
+    /* 🔴 Zukunft prüfen */
+    if(selectedKWNumber > currentKW){
+
+        alert("Keine Daten vorhanden – Datum liegt in der Zukunft.");
+
+        data = JSON.parse(JSON.stringify(defaultInventory));
+        seedsData = JSON.parse(JSON.stringify(defaultSeeds));
+
+        renderTable();
+        renderSeeds();
+        updatePrintHeader();
+        return;
+    }
+
+    /* Woche im Speicher vorhanden? */
+    if(allWeeks[selectedWeek]){
+
+        data = allWeeks[selectedWeek].inventory;
+        seedsData = allWeeks[selectedWeek].seeds;
+
+    }else{
+        /* Noch keine Daten → Default laden */
+        data = JSON.parse(JSON.stringify(defaultInventory));
+        seedsData = JSON.parse(JSON.stringify(defaultSeeds));
+    }
+
+    renderTable();
+    renderSeeds();
+    updatePrintHeader();
 }
+
 
 /* Woche speichern */
 function saveWeekData(){
-    const selectedWeek = kwSelect?.value || CURRENT_KW_KEY;
+
+    const selectedWeek = kwSelect.value;   // einzige Quelle!
 
     const allWeeks = loadAllWeeks();
     allWeeks[selectedWeek] = {
@@ -42,30 +83,30 @@ function saveWeekData(){
     };
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(allWeeks));
-    populateKWSelector();
 }
 
 
 
 
+
 let defaultInventory = [
-  { name:"Baffle 920/910 mm", artikel:"E00007344", vorOrt:17, lager:100, aufbau:0 },
-  { name:"Hartfilzplatte1000x1500x10 mm", artikel:"E00033020", vorOrt:28, lager:0, aufbau:0 },
-  { name:"Baffle 688 mm", artikel:"E00007106", vorOrt:16, lager:100, aufbau:0 },
-  { name:"CFC Platte 1000x1000x2,0mm", artikel:"E00033083", vorOrt:46, lager:0, aufbau:0 },
-  { name:"Vierkantmutter M10 17x17mm", artikel:"E00006727", vorOrt:330, lager:0, aufbau:0 },
-  { name:"CFC Gewindestange M10 x 1000 mm", artikel:"E00033019", vorOrt:34, lager:0, aufbau:0 },
-  { name:"CFC Gewindestange M6 x 70 mm", artikel:"E00007814", vorOrt:200, lager:0, aufbau:0 },
-  { name:"Rundmutter M6 25 x 5 mm", artikel:"E00008295", vorOrt:680, lager:0, aufbau:0 },
+  { name:"Baffle 920/910 mm", artikel:"E00007344", vorOrt:0, lager:0, aufbau:0 },
+  { name:"Hartfilzplatte1000x1500x10 mm", artikel:"E00033020", vorOrt:0, lager:0, aufbau:0 },
+  { name:"Baffle 688 mm", artikel:"E00007106", vorOrt:0, lager:0, aufbau:0 },
+  { name:"CFC Platte 1000x1000x2,0mm", artikel:"E00033083", vorOrt:0, lager:0, aufbau:0 },
+  { name:"Vierkantmutter M10 17x17mm", artikel:"E00006727", vorOrt:0, lager:0, aufbau:0 },
+  { name:"CFC Gewindestange M10 x 1000 mm", artikel:"E00033019", vorOrt:0, lager:0, aufbau:0 },
+  { name:"CFC Gewindestange M6 x 70 mm", artikel:"E00007814", vorOrt:0, lager:0, aufbau:0 },
+  { name:"Rundmutter M6 25 x 5 mm", artikel:"E00008295", vorOrt:0, lager:0, aufbau:0 },
   { name:"Nickel Foil Purity 99,6% 0,0125 mm x 500 mm", artikel:"E32705202", vorOrt:0, lager:0, aufbau:0 },
-  { name:"Graphitkordel 2 mm Ø", artikel:"E00000177", vorOrt:1, lager:0, aufbau:0 },
-  { name:"Flachmutter, rund M10 25 x 7 mm", artikel:"E00008296", vorOrt:310, lager:0, aufbau:0 }
+  { name:"Graphitkordel 2 mm Ø", artikel:"E00000177", vorOrt:0, lager:0, aufbau:0 },
+  { name:"Flachmutter, rund M10 25 x 7 mm", artikel:"E00008296", vorOrt:0, lager:0, aufbau:0 }
 ];
 
 let defaultSeeds = [
-    { typ:"A", menge:91 },
-    { typ:"B", menge:127 },
-    { typ:"SfS", menge:41 }
+    { typ:"A", menge:0 },
+    { typ:"B", menge:0 },
+    { typ:"S f S", menge:0 }
 ];
 
 /* ==============================
@@ -73,12 +114,12 @@ let defaultSeeds = [
 ============================== */
 let currentKW = getCurrentKW();   // ← NEU (global verfügbar)
 
-const weekData = loadWeekData();
-
-let data = weekData ? weekData.inventory : defaultInventory;
-let seedsData = weekData ? weekData.seeds : defaultSeeds;
-
-
+let data = JSON.parse(JSON.stringify(defaultInventory));
+let seedsData = JSON.parse(JSON.stringify(defaultSeeds));
+/* ==============================
+   HILFSFUNKTIONEN
+============================== */
+/* Aktuelle Kalenderwoche berechnen */4
 function getCurrentKW(){
     const now = new Date();
     const firstJan = new Date(now.getFullYear(),0,1);
@@ -269,47 +310,71 @@ const kwSelect = document.getElementById("kwSelect");
 
 /* vorhandene Wochen laden */
 function populateKWSelector(){
-    const allWeeks = loadAllWeeks();
+
+    const currentKW = getCurrentKW();
+    const year = new Date().getFullYear();
+
     kwSelect.innerHTML = "";
 
-    // aktuelle KW hinzufügen falls noch nicht gespeichert
-    if(!allWeeks[CURRENT_KW_KEY]){
-        allWeeks[CURRENT_KW_KEY] = { inventory: defaultInventory, seeds: defaultSeeds };
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(allWeeks));
+    // alle KW des Jahres erzeugen (1–52)
+    for(let kw=1; kw<=52; kw++){
+
+        const opt = document.createElement("option");
+        opt.value = `${year}-KW${kw}`;
+
+        // Anzeige im Dropdown
+        if(kw > currentKW){
+            opt.textContent = `KW ${kw} (Zukunft)`;
+        }else{
+            opt.textContent = `KW ${kw}`;
+        }
+
+        kwSelect.appendChild(opt);
     }
 
-    const weeks = Object.keys(allWeeks).sort().reverse();
-
-    weeks.forEach(weekKey=>{
-        const option = document.createElement("option");
-        option.value = weekKey;
-        option.textContent = weekKey;
-        if(weekKey === CURRENT_KW_KEY) option.selected = true;
-        kwSelect.appendChild(option);
-    });
+    // aktuelle Woche automatisch auswählen
+    kwSelect.value = `${year}-KW${currentKW}`;
 }
+
 
 populateKWSelector();
 
 /* KW wechseln */
 kwSelect.addEventListener("change", ()=>{
-    const selectedWeek = kwSelect.value;
-    const allWeeks = loadAllWeeks();
-    const weekData = allWeeks[selectedWeek];
-
-    data = JSON.parse(JSON.stringify(weekData.inventory));
-    seedsData = JSON.parse(JSON.stringify(weekData.seeds));
-
-    renderTable();
-    renderSeeds();
-
-    document.getElementById("kwDisplay").textContent = selectedWeek;
+    loadWeekData();
 });
+ 
+/* Alle gespeicherten Wochen zurückgeben (sortiert) */
+function getStoredWeeks(){
+    const allWeeks = loadAllWeeks();
+    return Object.keys(allWeeks).sort();
+}
+
+function populateResetWeekSelect(){
+    const select = document.getElementById("resetWeekSelect");
+    select.innerHTML = "";
+
+    const weeks = getStoredWeeks();
+
+    weeks.forEach(week=>{
+        const opt = document.createElement("option");
+        opt.value = week;
+        opt.textContent = week;
+        select.appendChild(opt);
+    });
+}
+
+
+
+
+
+
 
 /* Drucken */
 document.getElementById("printBtn").addEventListener("click", ()=>{
     window.print();
 });
+
 
 /* ===============================
    SERVICE WORKER REGISTRIEREN
@@ -336,41 +401,106 @@ function formatGermanDate(date){
 document.getElementById("currentDate").textContent =
     formatGermanDate(new Date());
 
+
 /* ===============================
-   DATEN ZURÜCKSETZEN (pro KW)
+   DATEN ZURÜCKSETZEN (aktive KW)
 =============================== */
-document.getElementById("resetBtn").addEventListener("click", ()=>{
+/* Reset-Button */
+resetBtn.addEventListener("click", ()=>{
+    populateResetWeekSelect();
+    document.getElementById("resetPanel").classList.remove("hidden");
+});
 
-    if(!confirm("Alle Daten dieser Woche wirklich löschen?"))
+/* Reset abbrechen */
+document.getElementById("cancelReset").onclick = ()=>{
+    document.getElementById("resetPanel").classList.add("hidden");
+};
+
+/* Daten zurücksetzen */
+document.getElementById("confirmReset").onclick = ()=>{
+
+    const mode = document.querySelector("input[name='resetMode']:checked").value;
+    const allWeeks = loadAllWeeks();
+
+    if(mode === "current"){
+        delete allWeeks[kwSelect.value];
+    }
+
+    if(mode === "single"){
+        const week = document.getElementById("resetWeekSelect").value;
+        delete allWeeks[week];
+    }
+
+    if(mode === "all"){
+        localStorage.removeItem(STORAGE_KEY);
+        location.reload();
         return;
+    }
 
-    const weekKey = STORAGE_KEY + "_KW_" + currentKW;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(allWeeks));
 
-    localStorage.removeItem(weekKey);
-
-    // Default Daten neu laden
     loadWeekData();
     renderTable();
     renderSeeds();
-});
+
+    document.getElementById("resetPanel").classList.add("hidden");
+};
+
 
 /* ===============================
    DRUCK HEADER (KW anzeigen)
 =============================== */
 function updatePrintHeader(){
     document.querySelector(".print-kw").textContent =
-        "Kalenderwoche: " + currentKW;
+        "Kalenderwoche: " + kwSelect.value;
 }
+
 
 /* =====================================
    APP START (DOM READY)
 ===================================== */
 document.addEventListener("DOMContentLoaded", () => {
 
+    populateKWSelector();   // zuerst KW füllen
+    loadWeekData();         // DANN Woche laden
     updatePrintHeader();
-    renderTable();
-    renderSeeds();
 
 });
 
 
+
+/* =========================
+   SERVICE WORKER UPDATE CHECK
+========================= */
+
+if ('serviceWorker' in navigator) {
+
+    navigator.serviceWorker.register('sw.js')
+    .then(reg => {
+
+        // Wenn neuer SW installiert wurde
+        reg.onupdatefound = () => {
+            const newWorker = reg.installing;
+
+            newWorker.onstatechange = () => {
+                if (newWorker.state === 'installed') {
+                    if (navigator.serviceWorker.controller) {
+                        showUpdateBanner();
+                    }
+                }
+            };
+        };
+
+    }).catch(err => console.log("SW Fehler:", err));
+}
+
+function showUpdateBanner(){
+    document.getElementById("updateBanner").style.display = "block";
+}
+
+function updateApp(){
+    caches.keys().then(keys=>{
+        keys.forEach(key=>caches.delete(key));
+        location.reload(true);
+    });
+}

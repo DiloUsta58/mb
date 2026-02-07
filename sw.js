@@ -1,13 +1,18 @@
-/* ===== Service Worker ===== */
+/* =====================================
+   SERVICE WORKER – VERSIONED PWA CACHE
+===================================== */
 
-const CACHE_NAME = "inventur-baffle-v1";
-const BASE_PATH = "/mb/";   // deine App liegt im Ordner /mb/
+/* 👉 VERSION HIER BEI JEDEM RELEASE ÄNDERN */
+const CACHE_VERSION = "inventur-baffle-1.1.2";
 
+const BASE_PATH = "/mb/";
+
+/* Alle Dateien die offline verfügbar sein sollen */
 const ASSETS = [
   BASE_PATH,
   BASE_PATH + "index.html",
-  BASE_PATH + "css/style.css",
-  BASE_PATH + "js/app.js",
+  BASE_PATH + "style.css",
+  BASE_PATH + "app.js",
   BASE_PATH + "manifest.json",
 
   BASE_PATH + "icons/icon_16.png",
@@ -18,32 +23,53 @@ const ASSETS = [
   BASE_PATH + "icons/icon_256.png"
 ];
 
-/* INSTALL */
+/* ================= INSTALL ================= */
 self.addEventListener("install", event => {
+
+  /* 👉 Neuer SW aktiviert sich sofort */
+  self.skipWaiting();
+
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(ASSETS);
-    })
+    caches.open(CACHE_VERSION)
+      .then(cache => {
+        return cache.addAll(ASSETS);
+      })
   );
 });
 
-/* ACTIVATE */
+
+/* ================= ACTIVATE ================= */
 self.addEventListener("activate", event => {
+
+  /* 👉 Alte Cache Versionen löschen */
   event.waitUntil(
-    caches.keys().then(keys => {
-      return Promise.all(
-        keys.filter(key => key !== CACHE_NAME)
-            .map(key => caches.delete(key))
-      );
-    })
+    caches.keys().then(keys =>
+      Promise.all(
+        keys.map(key => {
+          if (key !== CACHE_VERSION) {
+            return caches.delete(key);
+          }
+        })
+      )
+    )
   );
+
+  /* 👉 übernimmt sofort alle offenen Tabs */
+  self.clients.claim();
 });
 
-/* FETCH */
+
+/* ================= FETCH ================= */
 self.addEventListener("fetch", event => {
+
   event.respondWith(
-    caches.match(event.request).then(response => {
-      return response || fetch(event.request);
-    })
+    caches.match(event.request)
+      .then(response => {
+
+        /* Cache first → dann Netzwerk */
+        return response || fetch(event.request);
+
+      })
   );
+
 });

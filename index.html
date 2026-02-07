@@ -30,13 +30,33 @@
 
 
     <div class="date">
-    <div class="kw-bar">
-        <strong>Woche:</strong>
-        <select id="kwSelect"></select>
-        <span id="kwDisplay"></span>
-        <button id="printBtn">Drucken</button>
-        <button id="resetBtn">Zurücksetzen</button>
-    </div>
+        <div class="kw-bar">
+            <strong>Woche:</strong>
+            <select id="kwSelect"></select>
+            <span id="kwDisplay"></span>
+            <button id="printBtn">Drucken</button>
+            <button id="resetBtn">Zurücksetzen</button>
+                <div id="resetPanel" class="reset-panel hidden">
+                    <h3>Daten zurücksetzen</h3>
+                    <label>
+                        <input type="radio" name="resetMode" value="current" checked>
+                        Aktuelle Kalenderwoche
+                    </label>
+                    <label>
+                        <input type="radio" name="resetMode" value="single">
+                        Bestimmte Kalenderwoche
+                    </label>
+                    <select id="resetWeekSelect"></select>
+                    <label>
+                        <input type="radio" name="resetMode" value="all">
+                        ⚠️ Alle Wochen löschen
+                    </label>
+                    <div class="reset-actions">
+                        <button id="confirmReset">Bestätigen</button>
+                        <button id="cancelReset">Abbrechen</button>
+                    </div>
+                </div>
+        </div>
     </div>
 
  <div class="tables-wrapper">
@@ -78,6 +98,10 @@
 </div><br>
         <div class="footer">
              Stand: <span id="currentDate"></span> Murat Bölükbaş
+             <div id="updateBanner">Neue Version verfügbar 🔄
+            <button onclick="updateApp()">Aktualisieren</button>
+</div>
+
         </div>    
 </div>
 
