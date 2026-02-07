@@ -81,11 +81,28 @@ const tbody = document.querySelector("#inventoryTable tbody");
 
 /* Berechnung */
 function calcTotal(vorOrt, lager, aufbau){
+
     vorOrt = Number(vorOrt) || 0;
     lager  = Number(lager)  || 0;
     aufbau = Number(aufbau) || 0;
-    return (vorOrt + lager) - aufbau;
+
+    let newVorOrt = vorOrt;
+    let newLager  = lager;
+
+    // 1️⃣ Aufbau zuerst von Vor Ort abziehen
+    if (aufbau <= newVorOrt){
+        newVorOrt -= aufbau;
+    }else{
+        // 2️⃣ Rest von Lager abziehen
+        let rest = aufbau - newVorOrt;
+        newVorOrt = 0;
+        newLager = Math.max(0, newLager - rest);
+    }
+
+    // 3️⃣ Gesamt berechnen
+    return newVorOrt + newLager;
 }
+
 
 /* Tabelle rendern */
 function renderTable(){
@@ -148,7 +165,7 @@ function renderSeeds(){
 renderSeeds();
 
 /* =====================================
-   GLOBAL INPUT LISTENER (Inventory + Seeds)
+   GLOBAL INPUT LISTENER (Tippen erlauben)
 ===================================== */
 document.addEventListener("input", e=>{
 
@@ -158,17 +175,25 @@ document.addEventListener("input", e=>{
         const rowIndex = e.target.dataset.row;
         const field = e.target.dataset.field;
 
-        data[rowIndex][field] = e.target.value;
+        data[rowIndex][field] = Number(e.target.value) || 0;
 
+        /* 🔴 LIVE Gesamt berechnen */
         const row = e.target.closest("tr");
         const inputs = row.querySelectorAll("input");
 
-        const vorOrt = inputs[0].value;
-        const lager  = inputs[1].value;
-        const aufbau = inputs[2].value;
+        const vorOrt = Number(inputs[0].value) || 0;
+        const lager  = Number(inputs[1].value) || 0;
 
-        row.querySelector(".total").textContent =
-            calcTotal(vorOrt,lager,aufbau);
+        const total = vorOrt + lager;
+
+        const totalCell = row.querySelector(".total");
+        totalCell.textContent = total;
+        totalCell.dataset.print = total;
+
+        /* Druckwerte aktualisieren */
+        inputs[0].parentElement.dataset.print = vorOrt;
+        inputs[1].parentElement.dataset.print = lager;
+        inputs[2].parentElement.dataset.print = Number(inputs[2].value) || 0;
 
         saveWeekData();
         return;
@@ -177,12 +202,45 @@ document.addEventListener("input", e=>{
     /* ===== SEEDS ===== */
     if(e.target.dataset.seed !== undefined){
         const index = e.target.dataset.seed;
-        seedsData[index].menge = e.target.value;
-
+        seedsData[index].menge = Number(e.target.value) || 0;
         saveWeekData();
         return;
     }
+});
 
+
+/* =====================================
+   AUFBAU BUCHEN (bei Feld verlassen)
+===================================== */
+document.addEventListener("change", e=>{
+
+    if(e.target.dataset.field !== "aufbau") return;
+
+    const rowIndex = e.target.dataset.row;
+    let rowData = data[rowIndex];
+
+    let aufbau = Number(rowData.aufbau) || 0;
+    if(aufbau === 0) return;
+
+    let vorOrt = Number(rowData.vorOrt) || 0;
+    let lager  = Number(rowData.lager)  || 0;
+
+    /* 🔥 Lagerlogik */
+    if(aufbau <= vorOrt){
+        vorOrt -= aufbau;
+    }else{
+        let rest = aufbau - vorOrt;
+        vorOrt = 0;
+        lager = Math.max(0, lager - rest);
+    }
+
+    /* Werte übernehmen */
+    rowData.vorOrt = vorOrt;
+    rowData.lager  = lager;
+    rowData.aufbau = 0;
+
+    saveWeekData();
+    renderTable();
 });
 
 
