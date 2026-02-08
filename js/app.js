@@ -414,7 +414,7 @@ document.getElementById("printBtn").addEventListener("click", ()=>{
       "Im Druckdialog → Weitere Einstellungen →\n" +
       "Häkchen bei 'Kopf- und Fußzeilen' entfernen."
     );
-        
+
     window.print();
 });
 
@@ -505,6 +505,15 @@ function updatePrintHeader(){
    APP START (DOM READY)
 ===================================== */
 document.addEventListener("DOMContentLoaded", () => {
+
+
+    alert(
+      "Tipp falls die Seite sich nicht aktuallisiert:\n\n" +
+      "Iphone: Einstellung → Apps → Safari \n" +
+      "→ 'Websitedaten löschen' → Seite neu laden\n\n" +
+      "PC: STRG + F5 drücken (Hard Reload)"
+    );
+
 
     populateKWSelector();   // zuerst KW füllen
     loadWeekData();         // DANN Woche laden
