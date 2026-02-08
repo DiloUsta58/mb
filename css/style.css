@@ -547,12 +547,12 @@ html, body{
 }
 
 .main-table{
-    width:70%;
+    width:100%;
+}
+.seeds-wrapper{
+    width:100%;
 }
 
-.seeds-wrapper{
-    width:30%;
-}
 
 /* Seeds etwas kompakter */
 .seedsTable input{
