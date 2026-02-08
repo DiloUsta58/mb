@@ -448,3 +448,76 @@ html, body{
     color: white;
     cursor: pointer;
 }
+
+/* =====================================
+   TABELLEN WRAPPER (DESKTOP)
+===================================== */
+.tables-wrapper{
+    display:flex;
+    gap:30px;
+    align-items:flex-start;
+}
+
+.main-table{
+    width:70%;
+}
+
+.seeds-wrapper{
+    width:30%;
+}
+
+/* Seeds etwas kompakter */
+.seedsTable input{
+    width:80px;
+    text-align:center;
+}
+
+
+/* =====================================
+   TABLET / HANDY QUERFORMAT
+   -> nebeneinander lassen
+===================================== */
+@media (max-width:1024px) and (orientation:landscape){
+    .main-table{ width:65%; }
+    .seeds-wrapper{ width:35%; }
+}
+
+
+/* =====================================
+   HANDY HOCHFORMAT
+   -> untereinander + Artikelnummer ausblenden
+===================================== */
+@media (max-width:768px) and (orientation:portrait){
+
+    .tables-wrapper{
+        flex-direction:column;
+        gap:25px;
+    }
+
+    .main-table,
+    .seeds-wrapper{
+        width:100%;
+    }
+
+    /* ❗ Artikelnummer ausblenden */
+    .col-art{
+        display:none;
+    }
+
+    /* Zahlen größer für Touch */
+    #inventoryTable input{
+        width:65px;
+        font-size:16px;
+        padding:6px;
+    }
+
+    .seedsTable{
+        font-size:18px;
+    }
+
+    .seedsTable input{
+        width:100px;
+        font-size:18px;
+        padding:6px;
+    }
+}
