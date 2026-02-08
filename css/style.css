@@ -477,7 +477,7 @@ html, body{
    TABLET / HANDY QUERFORMAT
    -> nebeneinander lassen
 ===================================== */
-@media (max-width:1024px) and (orientation:landscape){
+@media (min-width:769px) and (max-width:1024px){
     .main-table{ width:65%; }
     .seeds-wrapper{ width:35%; }
 }
@@ -487,7 +487,7 @@ html, body{
    HANDY HOCHFORMAT
    -> untereinander + Artikelnummer ausblenden
 ===================================== */
-@media (max-width:768px) and (orientation:portrait){
+@media (max-width:768px) {
 
     .tables-wrapper{
         flex-direction:column;
@@ -497,11 +497,6 @@ html, body{
     .main-table,
     .seeds-wrapper{
         width:100%;
-    }
-
-    /* ❗ Artikelnummer ausblenden */
-    .col-art{
-        display:none;
     }
 
     /* Zahlen größer für Touch */
@@ -520,4 +515,17 @@ html, body{
         font-size:18px;
         padding:6px;
     }
+}
+
+/* =====================================
+MOBILE – Artikelnummer Spalte komplett entfernen
+===================================== */
+@media (max-width:768px){
+
+    /* Artikelnummer = 2. Spalte */
+    #inventoryTable th:nth-child(2),
+    #inventoryTable td:nth-child(2){
+        display:none;
+    }
+
 }
