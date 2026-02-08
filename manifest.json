@@ -1,6 +1,6 @@
 {
   "name": "Zählliste Baffle",
-  "short_name": "Inventur",
+  "short_name": "Zählliste",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
