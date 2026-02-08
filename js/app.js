@@ -1,7 +1,7 @@
 /* =========================
    APP VERSION
 ========================= */
-const APP_VERSION = "1.1.2";
+const APP_VERSION = "1.1.3";
 
 
 /* =========================
@@ -28,7 +28,7 @@ function loadAllWeeks(){
 }
 
 /* =====================================
-   EINE WOCHE LADEN
+   EINE WOCHE LADEN (MIT AUTO-ÜBERNAHME)
 ===================================== */
 function loadWeekData(){
 
@@ -39,7 +39,7 @@ function loadWeekData(){
     const currentKW = getCurrentKW();
     const selectedKWNumber = Number(selectedWeek.split("KW")[1]);
 
-    /* 🔴 Zukunft prüfen */
+    /* 🔴 1. Zukunft prüfen */
     if(selectedKWNumber > currentKW){
 
         alert("Keine Daten vorhanden – Datum liegt in der Zukunft.");
@@ -53,22 +53,49 @@ function loadWeekData(){
         return;
     }
 
-    /* Woche im Speicher vorhanden? */
+    /* 🟢 2. Woche hat bereits Daten → normal laden */
     if(allWeeks[selectedWeek]){
-
         data = allWeeks[selectedWeek].inventory;
         seedsData = allWeeks[selectedWeek].seeds;
 
-    }else{
-        /* Noch keine Daten → Default laden */
-        data = JSON.parse(JSON.stringify(defaultInventory));
-        seedsData = JSON.parse(JSON.stringify(defaultSeeds));
+        renderTable();
+        renderSeeds();
+        updatePrintHeader();
+        return;
     }
 
+    /* 🟡 3. Woche hat KEINE Daten → Vorwoche suchen */
+    const prevWeekKey = getPreviousWeekKey(selectedWeek);
+
+    if(prevWeekKey && allWeeks[prevWeekKey]){
+
+        console.log("📦 Übernehme Daten aus", prevWeekKey);
+
+        // Deep Copy (!! sehr wichtig)
+        data = JSON.parse(JSON.stringify(allWeeks[prevWeekKey].inventory));
+        seedsData = JSON.parse(JSON.stringify(allWeeks[prevWeekKey].seeds));
+
+        // sofort speichern → Woche existiert jetzt
+        saveWeekData();
+
+        renderTable();
+        renderSeeds();
+        updatePrintHeader();
+        return;
+    }
+
+    /* 🔵 4. Erste Nutzung → Default */
+    console.log("🆕 Starte mit Default Daten");
+
+    data = JSON.parse(JSON.stringify(defaultInventory));
+    seedsData = JSON.parse(JSON.stringify(defaultSeeds));
+
+    saveWeekData();
     renderTable();
     renderSeeds();
     updatePrintHeader();
 }
+
 
 
 /* Woche speichern */
@@ -127,6 +154,16 @@ function getCurrentKW(){
     return Math.ceil((days + firstJan.getDay()+1) / 7);
 }
 
+/* Vorherige Woche ermitteln */
+function getPreviousWeekKey(currentKey){
+    const allWeeks = loadAllWeeks();
+    const keys = Object.keys(allWeeks).sort(); // chronologisch
+
+    const index = keys.indexOf(currentKey);
+    if(index <= 0) return null;
+
+    return keys[index - 1];
+}
 
 
 document.getElementById("kwDisplay").textContent =
@@ -185,7 +222,7 @@ function renderTable(){
                 <input type="number" value="${item.aufbau}" data-row="${index}" data-field="aufbau">
             </td>
 
-            <td class="total" data-print="${calcTotal(item.vorOrt,item.lager,item.aufbau)}">
+            <td class="total">
                 ${calcTotal(item.vorOrt,item.lager,item.aufbau)}
             </td>
 
@@ -246,7 +283,7 @@ document.addEventListener("input", e=>{
 
         const totalCell = row.querySelector(".total");
         totalCell.textContent = total;
-        totalCell.dataset.print = total;
+
 
         /* Druckwerte aktualisieren */
         inputs[0].parentElement.dataset.print = vorOrt;
