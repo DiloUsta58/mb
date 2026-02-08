@@ -1,7 +1,7 @@
 /* =========================
    APP VERSION
 ========================= */
-const APP_VERSION = "1.1.4";
+const APP_VERSION = "1.1.5";
 
 /* =========================
    THEME SWITCHER
@@ -431,7 +431,13 @@ document.getElementById("printBtn").addEventListener("click", ()=>{
     alert(
       "Tipp für sauberen Ausdruck:\n\n" +
       "Im Druckdialog → Weitere Einstellungen →\n" +
-      "Häkchen bei 'Kopf- und Fußzeilen' entfernen."
+      "Häkchen bei 'Kopf- und Fußzeilen' entfernen." +
+      "     \n\n" +
+    "Bei Problemen mit veralteten Daten:\n" +
+    "Iphone: Einstellung → Apps → Safari \n" +  
+    "→ 'Websitedaten löschen' → Seite neu laden\n\n" +
+    "Dark Mode: Wenn aktiviert, kann es sein, dass die Druckversion zu dunkel ist.\n\n" +
+    "In diesem Fall bitte vorübergehend auf Light Mode wechseln."
     );
 
     window.print();
@@ -546,12 +552,15 @@ document.addEventListener("DOMContentLoaded", () => {
    SERVICE WORKER UPDATE CHECK
 ========================= */
 
+let swRegistration;
+
 if ('serviceWorker' in navigator) {
 
-    navigator.serviceWorker.register('sw.js')
-    .then(reg => {
+    navigator.serviceWorker.register('sw.js').then(reg => {
 
-        // Wenn neuer SW installiert wurde
+        swRegistration = reg;
+
+        // Neuer Service Worker gefunden
         reg.onupdatefound = () => {
             const newWorker = reg.installing;
 
@@ -565,18 +574,29 @@ if ('serviceWorker' in navigator) {
         };
 
     }).catch(err => console.log("SW Fehler:", err));
+
+    // Wenn neuer SW aktiv → Seite neu laden
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+        window.location.reload();
+    });
 }
 
 function showUpdateBanner(){
     document.getElementById("updateBanner").style.display = "block";
 }
 
+/* 👉 DAS ist jetzt der richtige Update Button */
 function updateApp(){
-    caches.keys().then(keys=>{
-        keys.forEach(key=>caches.delete(key));
-        location.reload(true);
-    });
+
+    if(!swRegistration || !swRegistration.waiting){
+        location.reload();
+        return;
+    }
+
+    // Neuer SW darf aktiv werden
+    swRegistration.waiting.postMessage("SKIP_WAITING");
 }
+
 
 /* =========================
    THEME TOGGLE

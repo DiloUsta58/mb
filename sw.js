@@ -2,12 +2,9 @@
    SERVICE WORKER – VERSIONED PWA CACHE
 ===================================== */
 
-/* 👉 VERSION HIER BEI JEDEM RELEASE ÄNDERN */
-const CACHE_VERSION = "inventur-baffle-1.1.4";
-
+const CACHE_VERSION = "inventur-baffle-1.1.5"; // <- bei jedem Release ändern
 const BASE_PATH = "/mb/";
 
-/* Alle Dateien die offline verfügbar sein sollen */
 const ASSETS = [
   BASE_PATH,
   BASE_PATH + "index.html",
@@ -25,51 +22,37 @@ const ASSETS = [
 
 /* ================= INSTALL ================= */
 self.addEventListener("install", event => {
-
-  /* 👉 Neuer SW aktiviert sich sofort */
-  self.skipWaiting();
+  console.log("SW installiert");
 
   event.waitUntil(
     caches.open(CACHE_VERSION)
-      .then(cache => {
-        return cache.addAll(ASSETS);
-      })
+      .then(cache => cache.addAll(ASSETS))
   );
 });
-
 
 /* ================= ACTIVATE ================= */
 self.addEventListener("activate", event => {
+  console.log("SW aktiviert");
 
-  /* 👉 Alte Cache Versionen löschen */
   event.waitUntil(
     caches.keys().then(keys =>
       Promise.all(
-        keys.map(key => {
-          if (key !== CACHE_VERSION) {
-            return caches.delete(key);
-          }
-        })
+        keys.map(key => key !== CACHE_VERSION && caches.delete(key))
       )
     )
   );
-
-  /* 👉 übernimmt sofort alle offenen Tabs */
-  self.clients.claim();
 });
 
+/* 👉 wartet auf Freigabe vom Frontend */
+self.addEventListener("message", event => {
+  if (event.data === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
+});
 
 /* ================= FETCH ================= */
 self.addEventListener("fetch", event => {
-
   event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-
-        /* Cache first → dann Netzwerk */
-        return response || fetch(event.request);
-
-      })
+    caches.match(event.request).then(res => res || fetch(event.request))
   );
-
 });
