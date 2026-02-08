@@ -3,6 +3,24 @@
 ========================= */
 const APP_VERSION = "1.1.3";
 
+/* =========================
+   THEME SWITCHER
+========================= */
+const THEME_KEY = "inventur_theme";
+
+function applyTheme(theme){
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem(THEME_KEY, theme);
+}
+
+function initTheme(){
+    const saved = localStorage.getItem(THEME_KEY);
+    const system = window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark" : "light";
+
+    applyTheme(saved || system);
+}
+
 
 /* =========================
    KW + STORAGE SYSTEM
@@ -506,14 +524,14 @@ function updatePrintHeader(){
 ===================================== */
 document.addEventListener("DOMContentLoaded", () => {
 
-
+/*
     alert(
       "Tipp falls die Seite sich nicht aktuallisiert:\n\n" +
       "Iphone: Einstellung → Apps → Safari \n" +
       "→ 'Websitedaten löschen' → Seite neu laden\n\n" +
       "PC: STRG + F5 drücken (Hard Reload)"
     );
-
+*/
 
     populateKWSelector();   // zuerst KW füllen
     loadWeekData();         // DANN Woche laden
@@ -558,4 +576,18 @@ function updateApp(){
         location.reload(true);
     });
 }
+
+/* =========================
+   THEME TOGGLE
+========================= */
+document.getElementById("themeToggle").onclick = () =>{
+    const current = document.documentElement.getAttribute("data-theme");
+    applyTheme(current === "dark" ? "light" : "dark");
+};
+
+initTheme();
+
+/* =========================
+   APP VERSION LOG
+========================= */
 console.log("App Version:", APP_VERSION);
