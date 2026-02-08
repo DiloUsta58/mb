@@ -351,7 +351,10 @@ html, body{
     font-family: Arial, Helvetica, sans-serif;
 }
 
-
+    /* Wird nur während Druck aktiv */
+    .print-light{
+        color-scheme: light;
+    }
 
     /* UI ausblenden */
     .kw-bar,
@@ -704,6 +707,10 @@ Ausblenden: Artikelnummer + Aufbau
     #resetBtn{
         flex:1;
         min-width:120px;
+    }
+    /* Wird nur während Druck aktiv */
+    .print-light{
+        color-scheme: light;
     }
 
 }

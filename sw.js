@@ -2,7 +2,7 @@
    SERVICE WORKER – VERSIONED PWA CACHE
 ===================================== */
 
-const CACHE_VERSION = "inventur-baffle-1.1.5"; // <- bei jedem Release ändern
+const CACHE_VERSION = "inventur-baffle-1.0.5"; // <- bei jedem Release ändern
 const BASE_PATH = "/mb/";
 
 const ASSETS = [

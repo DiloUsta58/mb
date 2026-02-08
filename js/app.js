@@ -1,7 +1,36 @@
 /* =========================
    APP VERSION
 ========================= */
-const APP_VERSION = "1.1.5";
+const APP_VERSION = "1.0.5";
+
+
+/* =====================================
+   PRINT → Dark Mode auf Mobile deaktivieren
+===================================== */
+
+let wasDarkBeforePrint = false;
+
+window.addEventListener("beforeprint", () => {
+
+    // prüfen ob Dark aktiv war
+    wasDarkBeforePrint = document.body.classList.contains("dark");
+
+    // Dark temporär ausschalten
+    document.body.classList.remove("dark");
+    document.body.classList.add("print-light");
+});
+
+window.addEventListener("afterprint", () => {
+
+    // Light Klasse wieder entfernen
+    document.body.classList.remove("print-light");
+
+    // Dark wieder aktivieren falls vorher aktiv
+    if(wasDarkBeforePrint){
+        document.body.classList.add("dark");
+    }
+});
+
 
 /* =========================
    THEME SWITCHER
@@ -429,18 +458,33 @@ function populateResetWeekSelect(){
 /* Drucken */
 document.getElementById("printBtn").addEventListener("click", ()=>{
     alert(
-      "Tipp für sauberen Ausdruck:\n\n" +
-      "Im Druckdialog → Weitere Einstellungen →\n" +
-      "Häkchen bei 'Kopf- und Fußzeilen' entfernen." +
-      "     \n\n" +
-    "Bei Problemen mit veralteten Daten:\n" +
-    "Iphone: Einstellung → Apps → Safari \n" +  
-    "→ 'Websitedaten löschen' → Seite neu laden\n\n" +
-    "Dark Mode: Wenn aktiviert, kann es sein, dass die Druckversion zu dunkel ist.\n\n" +
-    "In diesem Fall bitte vorübergehend auf Light Mode wechseln."
+        "Tipp für sauberen Ausdruck:\n\n" +
+        "Im Druckdialog → Weitere Einstellungen →\n" +
+        "Häkchen bei 'Kopf- und Fußzeilen' entfernen." +
+        "     \n\n" +
+        "Bei Problemen mit veralteten Daten:\n" +
+        "Iphone: Einstellung → Apps → Safari \n" +  
+        "→ 'Websitedaten löschen' → Seite neu laden\n\n" +
+        "Dark Mode: Wenn aktiviert, kann es sein, dass die Druckversion zu dunkel ist.\n\n" +
+        "In diesem Fall bitte vorübergehend auf Light Mode wechseln."
     );
 
-    window.print();
+    // Dark sicher deaktivieren (Fallback)
+    document.body.classList.add("print-light");
+    document.body.classList.remove("dark");
+
+    setTimeout(() => {
+        window.print();
+
+        // nach Druck wieder herstellen
+        setTimeout(() => {
+            document.body.classList.remove("print-light");
+            if(localStorage.getItem("theme") === "dark"){
+                document.body.classList.add("dark");
+            }
+        }, 500);
+
+    }, 150);
 });
 
 
