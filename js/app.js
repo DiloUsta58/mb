@@ -409,6 +409,12 @@ function populateResetWeekSelect(){
 
 /* Drucken */
 document.getElementById("printBtn").addEventListener("click", ()=>{
+    alert(
+      "Tipp für sauberen Ausdruck:\n\n" +
+      "Im Druckdialog → Weitere Einstellungen →\n" +
+      "Häkchen bei 'Kopf- und Fußzeilen' entfernen."
+    );
+        
     window.print();
 });
 
@@ -437,6 +443,8 @@ function formatGermanDate(date){
 
 document.getElementById("currentDate").textContent =
     formatGermanDate(new Date());
+
+document.getElementById("appVersion").textContent = APP_VERSION;
 
 
 /* ===============================
@@ -498,9 +506,6 @@ function updatePrintHeader(){
 ===================================== */
 document.addEventListener("DOMContentLoaded", () => {
 
-document.getElementById("vers").textContent = APP_VERSION;
-
-
     populateKWSelector();   // zuerst KW füllen
     loadWeekData();         // DANN Woche laden
     updatePrintHeader();
@@ -544,3 +549,4 @@ function updateApp(){
         location.reload(true);
     });
 }
+console.log("App Version:", APP_VERSION);
