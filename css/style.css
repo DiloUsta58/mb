@@ -616,4 +616,55 @@ MOBILE – Artikelnummer Spalte komplett entfernen
         display:none;
     }
 
+        .kw-bar{
+        display:flex;
+        flex-wrap:wrap;
+        gap:10px;
+        align-items:center;
+    }
+
+    /* erste Zeile: Woche + Select + Datum */
+    .kw-bar label{
+        width:100%;
+        font-weight:600;
+    }
+
+    #kwSelect{
+        flex:1;
+        min-width:140px;
+    }
+
+    /* Datum nach rechts schieben */
+    .currentWeekInfo{
+        width:100%;
+        opacity:.7;
+        font-size:14px;
+    }
+
+     /* Buttons gruppieren */
+     #printBtn,
+     #themeToggle,
+     #resetBtn{
+        flex:1;
+        min-width:120px;
+    }
+}
+
+
+/* =====================================
+MOBILE HEADER FIX
+===================================== */
+@media (max-width:768px){
+
+    body{
+        padding:8px;
+    }
+
+    .container{
+        max-width:100%;
+        width:100%;
+        padding:16px;
+        margin:0;
+    }
+
 }
