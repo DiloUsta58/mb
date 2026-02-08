@@ -498,6 +498,9 @@ function updatePrintHeader(){
 ===================================== */
 document.addEventListener("DOMContentLoaded", () => {
 
+document.getElementById("vers").textContent = APP_VERSION;
+
+
     populateKWSelector();   // zuerst KW füllen
     loadWeekData();         // DANN Woche laden
     updatePrintHeader();
