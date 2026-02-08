@@ -1,7 +1,7 @@
 /* =========================
    APP VERSION
 ========================= */
-const APP_VERSION = "1.1.3";
+const APP_VERSION = "1.1.4";
 
 /* =========================
    THEME SWITCHER
@@ -226,25 +226,26 @@ function renderTable(){
 
         row.innerHTML = `
             <td>${item.name}</td>
-            <td>${item.artikel}</td>
+
+            <td class="col-mobile-hide">${item.artikel}</td>
 
             <td data-print="${item.vorOrt}">
                 <input type="number" value="${item.vorOrt}" data-row="${index}" data-field="vorOrt">
             </td>
 
-            <td data-print="${item.lager}">
+            <td class="col-lager" data-print="${item.lager}">
                 <input type="number" value="${item.lager}" data-row="${index}" data-field="lager">
             </td>
 
-            <td data-print="${item.aufbau}">
+            <td class="col-aufbau col-mobile-hide" data-print="${item.aufbau}">
                 <input type="number" value="${item.aufbau}" data-row="${index}" data-field="aufbau">
             </td>
 
-            <td class="total">
+            <td class="total col-total">
                 ${calcTotal(item.vorOrt,item.lager,item.aufbau)}
             </td>
-
         `;
+
 
         tbody.appendChild(row);
     });
@@ -586,6 +587,11 @@ document.getElementById("themeToggle").onclick = () =>{
 };
 
 initTheme();
+
+
+
+
+
 
 /* =========================
    APP VERSION LOG

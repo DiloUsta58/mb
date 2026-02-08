@@ -606,24 +606,83 @@ html, body{
 }
 
 /* =====================================
-MOBILE – Artikelnummer Spalte komplett entfernen
+MOBILE LAYOUT – FINAL
+Spalten behalten: vor Ort | im Lager | Gesamt
+Ausblenden: Artikelnummer + Aufbau
 ===================================== */
 @media (max-width:768px){
 
-    /* Artikelnummer = 2. Spalte */
-    #inventoryTable th:nth-child(2),
-    #inventoryTable td:nth-child(2){
+    /* ===== Container Fullwidth ===== */
+    body{ padding:8px; }
+
+    .container{
+        max-width:100%;
+        width:100%;
+        padding:16px;
+        margin:0;
+    }
+
+    /* ===== Spalten AUSBLENDEN ===== */
+
+   /* =====================================
+    MOBILE – Spalten korrekt ausblenden
+    ===================================== */
+
+
+    /* ========= BODY ========= */
+
+    /* Artikelnummer (Spalte 2) */
+    #inventoryTable tbody td:nth-child(2){
         display:none;
     }
 
-        .kw-bar{
+    /* Aufbau (Spalte 5) */
+    #inventoryTable tbody td:nth-child(5){
+        display:none;
+    }
+
+
+    /* ========= HEADER – ZEILE 1 ========= */
+
+    /* Artikelnummer Header entfernen */
+    #inventoryTable thead tr:first-child th:nth-child(2){
+        display:none;
+    }
+
+
+    /* ========= HEADER – ZEILE 2 ========= */
+
+    /* Aufbau Header entfernen */
+    #inventoryTable thead tr:nth-child(2) th:nth-child(3){
+        display:none;
+    }
+
+    /* ===== INPUTS größer für Touch ===== */
+    #inventoryTable input{
+        width:65px;
+        font-size:16px;
+        padding:6px;
+    }
+
+    /* ===== Seeds größer ===== */
+    .seedsTable{
+        font-size:18px;
+    }
+
+    .seedsTable input{
+        width:100px;
+        font-size:18px;
+        padding:6px;
+    }
+
+    /* ===== Buttons unter Header umbrechen ===== */
+    .kw-bar{
         display:flex;
         flex-wrap:wrap;
         gap:10px;
         align-items:center;
     }
 
-    /* erste Zeile: Woche + Select + Datum */
     .kw-bar label{
         width:100%;
         font-weight:600;
@@ -634,37 +693,18 @@ MOBILE – Artikelnummer Spalte komplett entfernen
         min-width:140px;
     }
 
-    /* Datum nach rechts schieben */
     .currentWeekInfo{
         width:100%;
         opacity:.7;
         font-size:14px;
     }
 
-     /* Buttons gruppieren */
-     #printBtn,
-     #themeToggle,
-     #resetBtn{
+    #printBtn,
+    #themeToggle,
+    #resetBtn{
         flex:1;
         min-width:120px;
     }
-}
-
-
-/* =====================================
-MOBILE HEADER FIX
-===================================== */
-@media (max-width:768px){
-
-    body{
-        padding:8px;
-    }
-
-    .container{
-        max-width:100%;
-        width:100%;
-        padding:16px;
-        margin:0;
-    }
 
 }
+

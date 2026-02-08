@@ -3,7 +3,7 @@
 ===================================== */
 
 /* 👉 VERSION HIER BEI JEDEM RELEASE ÄNDERN */
-const CACHE_VERSION = "inventur-baffle-1.1.3";
+const CACHE_VERSION = "inventur-baffle-1.1.4";
 
 const BASE_PATH = "/mb/";
 
